@@ -25,6 +25,8 @@ export default defineConfig({
   use: {
     baseURL: 'https://www.pagbrasil.com',
     locale: 'pt-BR',
+    actionTimeout: 15_000,
+    navigationTimeout: 30_000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
