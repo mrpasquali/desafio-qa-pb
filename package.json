@@ -1,0 +1,21 @@
+
+{
+  "name": "desafio-qa-pagbrasil",
+  "version": "1.0.0",
+  "description": "Desafio técnico de QA da PagBrasil: cenários BDD (Gherkin) automatizados com Playwright + playwright-bdd",
+  "private": true,
+  "author": "Marina Pasquali",
+  "scripts": {
+    "bddgen": "bddgen",
+    "test": "bddgen && playwright test",
+    "test:frontend": "bddgen && playwright test --grep-invert @backend",
+    "test:backend": "bddgen && playwright test --grep @backend",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.1",
+    "@types/node": "^26.6.5",
+    "playwright-bdd": "^9.2.1",
+    "typescript": "^5.9.3"
+  }
+}
