@@ -24,7 +24,7 @@ export class ContatoPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.formulario = page.locator('.suporte-options-form form.wpcf7-form');
+    this.formulario = page.locator('.suporte-options-form form.wpcf7-form').filter({ visible: true });
     this.checkboxMarketing = this.formulario.locator('[data-name="autorizacao-checkbox"] input[type="checkbox"]');
     this.avisos = this.formulario.locator('.wpcf7-not-valid-tip');
     this.mensagemDeResumo = this.formulario.locator('.wpcf7-response-output');

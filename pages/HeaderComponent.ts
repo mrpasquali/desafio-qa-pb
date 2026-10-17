@@ -17,11 +17,21 @@ export class HeaderComponent {
     this.cta = this.header.locator('.cta');
   }
 
-  /** Item de primeiro nível do menu (ex.: "Nossas soluções", "Sobre"). */
-  itemDoMenu(nome: string): Locator {
+  /**
+   * Link de primeiro nível do menu (ex.: "Nossas soluções", "Sobre").
+   * O link termina com o ícone da setinha, que entra no nome acessível
+   * ("Nossas soluções "); por isso o nome é comparado ignorando o que vem
+   * depois do texto, desde que não sejam letras ou números.
+   */
+  linkDoMenu(nome: string): Locator {
     return this.menuDesktop
-      .locator(':scope > li')
-      .filter({ has: this.page.getByRole('link', { name: nome, exact: true }) });
+      .locator(':scope > li > a')
+      .filter({ hasText: new RegExp(`^\\s*${escapeRegex(nome)}\\W*$`) });
+  }
+
+  /** Item de primeiro nível do menu (o <li> com o link e o submenu). */
+  itemDoMenu(nome: string): Locator {
+    return this.linkDoMenu(nome).locator('xpath=..');
   }
 
   /** Submenu que abre ao clicar no item de primeiro nível. */
@@ -30,7 +40,7 @@ export class HeaderComponent {
   }
 
   async abrirMenu(nome: string): Promise<void> {
-    await this.itemDoMenu(nome).getByRole('link', { name: nome, exact: true }).first().click();
+    await this.linkDoMenu(nome).click();
   }
 
   get iconeDeBusca(): Locator {
@@ -40,4 +50,8 @@ export class HeaderComponent {
   get botaoFaleComEspecialista(): Locator {
     return this.cta.locator('a.btn-cta');
   }
+}
+
+function escapeRegex(texto: string): string {
+  return texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }

@@ -11,8 +11,12 @@ Given('acessei a página de contato pelo botão {string} do header', async ({ pa
 Given(
   'abri o formulário pelo link {string} da opção {string}',
   async ({ contato }, link: string, opcao: string) => {
-    await contato.opcao(opcao).getByRole('link', { name: link }).click();
-    await expect(contato.formulario).toBeVisible();
+    // Se o clique acontecer antes de o JavaScript da página estar pronto, o formulário não abre.
+    // O toPass repete o bloco (clicar e conferir) até o formulário aparecer.
+    await expect(async () => {
+      await contato.opcao(opcao).getByRole('link', { name: link }).click();
+      await expect(contato.formulario).toBeVisible({ timeout: 3_000 });
+    }).toPass({ timeout: 20_000 });
   },
 );
 
@@ -50,8 +54,9 @@ Then('o aviso {string} deve ser exibido nos campos:', async ({ contato }, aviso:
   for (const [campo] of tabela.raw()) {
     await expect(contato.avisoDoCampo(campo), `aviso no campo "${campo}"`).toHaveText(aviso);
   }
-  // Prova de que nada foi enviado: a mensagem de sucesso continua escondida.
-  await expect(contato.mensagemDeSucesso).toBeHidden();
+  // Prova de que nada foi enviado: nenhuma mensagem de sucesso está visível.
+  // (A página tem duas: a do formulário e a do popup de newsletter.)
+  await expect(contato.mensagemDeSucesso.filter({ visible: true })).toHaveCount(0);
 });
 
 Then('a mensagem {string} deve ser exibida', async ({ contato }, mensagem: string) => {

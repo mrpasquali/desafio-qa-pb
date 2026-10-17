@@ -10,9 +10,6 @@ const testDir = defineBddConfig({
 
 export default defineConfig({
   testDir,
-
-  // O site de produção limita o número de requisições por IP (HTTP 429).
-  // Por isso os testes rodam um de cada vez, e uma falha pontual ganha novas tentativas.
   workers: 1,
   fullyParallel: false,
   retries: 2,

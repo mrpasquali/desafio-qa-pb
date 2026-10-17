@@ -19,9 +19,10 @@ type Fixtures = {
 export const test = base.extend<Fixtures>({
   page: async ({ page }, use) => {
     // O banner de cookies pode cobrir os elementos da página.
-    // Sempre que ele aparecer, os cookies não essenciais são recusados e o teste continua.
-    await page.addLocatorHandler(page.getByText('Aceitar cookies', { exact: true }), async () => {
-      await page.getByText('Rejeitar', { exact: true }).first().click();
+    // Sempre que ele aparecer, o banner é fechado pelo botão "Aceitar cookies" e o teste continua.
+    const aceitarCookies = page.getByRole('button', { name: 'Aceitar cookies', exact: true });
+    await page.addLocatorHandler(aceitarCookies, async () => {
+      await aceitarCookies.click();
     });
     await use(page);
   },

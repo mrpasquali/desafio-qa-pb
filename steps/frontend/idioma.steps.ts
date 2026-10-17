@@ -29,7 +29,7 @@ Then('os textos devem ser exibidos em inglês:', async ({ header, footer }, tabe
   for (const { local, texto } of tabela.hashes()) {
     switch (local) {
       case 'menu principal':
-        await expect(header.menuDesktop.getByRole('link', { name: texto, exact: true })).toBeVisible();
+        await expect(header.linkDoMenu(texto)).toBeVisible();
         break;
       case 'botão do header':
         await expect(header.botaoFaleComEspecialista).toHaveText(texto);
